@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.banquito.paymentprocessor.validamarca.banquito.client.dto.MarcaRequest;
 import com.banquito.paymentprocessor.validamarca.banquito.client.dto.MarcaResponse;
 
-@FeignClient(name = "marca-service", url = "${marca.service.url}")
+@FeignClient(name = "marca-externa", url = "${app.marca-externa.url}")
 public interface MarcaClient {
     
-    @PostMapping("/validate")
+    @PostMapping("/api/v1/validate")
     MarcaResponse validarTarjeta(@RequestBody MarcaRequest request);
 } 

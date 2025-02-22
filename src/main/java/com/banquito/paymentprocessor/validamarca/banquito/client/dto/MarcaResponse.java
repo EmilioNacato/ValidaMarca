@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class MarcaResponse {
-    private Boolean isValid;
-    private String acquirerSwift;
-    private String errorMessage;
+    private Boolean tarjetaValida;
+    private String swiftBanco;
+    private String mensaje;
 } 

@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class MarcaRequest {
-    private String cardNumber;
-    private String brand;
+    private String numeroTarjeta;
+    private String marca;
     private String cvv;
-    private String expirationDate;
+    private String fechaCaducidad;
 } 

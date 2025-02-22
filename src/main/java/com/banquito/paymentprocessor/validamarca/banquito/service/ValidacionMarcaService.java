@@ -20,18 +20,21 @@ public class ValidacionMarcaService {
     }
 
     public MarcaResponse validarTarjeta(String numeroTarjeta, String marca, String cvv, String fechaCaducidad) {
-        log.debug("Iniciando validación de tarjeta con marca: {}", marca);
+        log.info("Iniciando proceso de validación con marca: {}", marca);
         try {
             MarcaRequest request = new MarcaRequest();
-            request.setCardNumber(numeroTarjeta);
-            request.setBrand(marca);
+            request.setNumeroTarjeta(numeroTarjeta);
+            request.setMarca(marca);
             request.setCvv(cvv);
-            request.setExpirationDate(fechaCaducidad);
+            request.setFechaCaducidad(fechaCaducidad);
 
-            return marcaClient.validarTarjeta(request);
+            MarcaResponse response = marcaClient.validarTarjeta(request);
+            log.info("Respuesta recibida del servicio de marca. Tarjeta válida: {}", response.getTarjetaValida());
+            
+            return response;
         } catch (Exception e) {
-            log.error("Error al validar tarjeta con marca: {}", marca, e);
-            throw new ValidacionMarcaException("Error al validar tarjeta con la marca", e);
+            log.error("Error en el proceso de validación con marca: {}", e.getMessage());
+            throw new ValidacionMarcaException("Error en el proceso de validación con marca: " + e.getMessage());
         }
     }
 } 
