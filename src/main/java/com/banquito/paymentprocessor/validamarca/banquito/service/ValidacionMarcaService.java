@@ -6,6 +6,9 @@ import com.banquito.paymentprocessor.validamarca.banquito.client.MarcaClient;
 import com.banquito.paymentprocessor.validamarca.banquito.client.dto.MarcaRequest;
 import com.banquito.paymentprocessor.validamarca.banquito.client.dto.MarcaResponse;
 import com.banquito.paymentprocessor.validamarca.banquito.exception.ValidacionMarcaException;
+import com.banquito.paymentprocessor.validamarca.banquito.controller.dto.ValidacionMarcaRequestDTO;
+import com.banquito.paymentprocessor.validamarca.banquito.controller.dto.ValidacionMarcaResponseDTO;
+
 
 import lombok.extern.slf4j.Slf4j;
 
