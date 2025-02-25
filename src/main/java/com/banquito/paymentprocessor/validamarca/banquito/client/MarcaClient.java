@@ -4,13 +4,12 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-//import com.banquito.paymentprocessor.validamarca.banquito.client.dto.MarcaRequest;
 import com.banquito.paymentprocessor.validamarca.banquito.client.dto.MarcaResponse;
-import com.banquito.paymentprocessor.validamarca.banquito.controller.dto.ValidacionMarcaRequestDTO;
+import com.banquito.paymentprocessor.validamarca.banquito.client.dto.MarcaRequest;
 
-@FeignClient(name = "marca-externa", url = "${app.marca-externa.url}")
+@FeignClient(name = "marca-service", url = "${app.marca-service.url}")
 public interface MarcaClient {
     
-    @PostMapping("/api/v1/validate")
-    MarcaResponse validarTarjeta(@RequestBody ValidacionMarcaRequestDTO request);
+    @PostMapping("/api/v1/validacion")
+    MarcaResponse validarTarjeta(@RequestBody MarcaRequest request);
 } 
