@@ -3,11 +3,9 @@ package com.banquito.paymentprocessor.validamarca.banquito.service;
 import org.springframework.stereotype.Service;
 
 import com.banquito.paymentprocessor.validamarca.banquito.client.MarcaClient;
-import com.banquito.paymentprocessor.validamarca.banquito.client.dto.MarcaRequest;
 import com.banquito.paymentprocessor.validamarca.banquito.client.dto.MarcaResponse;
 import com.banquito.paymentprocessor.validamarca.banquito.exception.ValidacionMarcaException;
 import com.banquito.paymentprocessor.validamarca.banquito.controller.dto.ValidacionMarcaRequestDTO;
-import com.banquito.paymentprocessor.validamarca.banquito.controller.dto.ValidacionMarcaResponseDTO;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +23,7 @@ public class ValidacionMarcaService {
     public MarcaResponse validarTarjeta(String numeroTarjeta, String marca, String cvv, String fechaCaducidad) {
         log.info("Iniciando proceso de validación con marca: {}", marca);
         try {
-            MarcaRequest request = new MarcaRequest();
+            ValidacionMarcaRequestDTO request = new ValidacionMarcaRequestDTO();
             request.setNumeroTarjeta(numeroTarjeta);
             request.setMarca(marca);
             request.setCvv(cvv);
