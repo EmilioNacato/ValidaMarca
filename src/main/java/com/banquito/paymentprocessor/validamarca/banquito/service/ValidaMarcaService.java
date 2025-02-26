@@ -1,13 +1,17 @@
 package com.banquito.paymentprocessor.validamarca.banquito.service;
 
-import com.banquito.paymentprocessor.validamarca.banquito.controller.dto.ValidacionMarcaRequestDTO;
-import com.banquito.paymentprocessor.validamarca.banquito.controller.dto.ValidacionMarcaResponseDTO;
+import com.banquito.paymentprocessor.validamarca.banquito.dto.ValidacionMarcaRequestDTO;
+import com.banquito.paymentprocessor.validamarca.banquito.dto.ValidacionMarcaResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 @Slf4j
-public class ValidacionMarcaService {
+public class ValidaMarcaService {
+
+    private List<String> marcasAceptadas;
 
     public ValidacionMarcaResponseDTO validarMarca(ValidacionMarcaRequestDTO request) {
         ValidacionMarcaResponseDTO response = new ValidacionMarcaResponseDTO();
@@ -46,6 +50,7 @@ public class ValidacionMarcaService {
     }
 
     private String obtenerSwiftBanco(String marca) {
+        // Lógica simplificada para obtener el SWIFT del banco según la marca
         switch (marca) {
             case "VISA":
                 return "BQTOECEC";

@@ -1,9 +1,9 @@
-package com.banquito.paymentprocessor.validamarca.banquito.client.dto;
+package com.banquito.paymentprocessor.validamarca.banquito.dto;
 
 import lombok.Data;
 
 @Data
-public class MarcaResponse {
+public class ValidacionMarcaResponseDTO {
     private boolean tarjetaValida;
     private String marca;
     private String swiftBanco;
