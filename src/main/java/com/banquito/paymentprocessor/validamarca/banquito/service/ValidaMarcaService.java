@@ -1,17 +1,16 @@
 package com.banquito.paymentprocessor.validamarca.banquito.service;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.banquito.paymentprocessor.validamarca.banquito.dto.ValidacionMarcaRequestDTO;
+import com.banquito.paymentprocessor.validamarca.banquito.dto.ValidacionMarcaResponseDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 @Slf4j
 public class ValidaMarcaService {
 
-    @Value("${marcas.aceptadas}")
     private List<String> marcasAceptadas;
 
     public ValidacionMarcaResponseDTO validarMarca(ValidacionMarcaRequestDTO request) {
@@ -20,18 +19,19 @@ public class ValidaMarcaService {
         try {
             String marca = identificarMarca(request.getNumeroTarjeta());
             
-            if (marcasAceptadas.contains(marca)) {
-                response.setValida(true);
+            if (marca != null) {
+                response.setTarjetaValida(true);
                 response.setMarca(marca);
-                response.setSwiftBanco(obtenerSwiftBanco(request.getNumeroTarjeta()));
+                response.setSwiftBanco(obtenerSwiftBanco(marca));
+                response.setMensaje("Tarjeta válida");
             } else {
-                response.setValida(false);
-                response.setMensaje("Marca de tarjeta no aceptada");
+                response.setTarjetaValida(false);
+                response.setMensaje("Marca de tarjeta no soportada");
             }
             
         } catch (Exception e) {
             log.error("Error al validar marca: {}", e.getMessage());
-            response.setValida(false);
+            response.setTarjetaValida(false);
             response.setMensaje("Error en validación de marca");
         }
         
@@ -39,13 +39,27 @@ public class ValidaMarcaService {
     }
 
     private String identificarMarca(String numeroTarjeta) {
-        String bin = numeroTarjeta.substring(0, 6);
-        // Lógica para identificar marca según BIN
-        return "VISA"; // Ejemplo simplificado
+        if (numeroTarjeta.startsWith("4")) {
+            return "VISA";
+        } else if (numeroTarjeta.startsWith("5")) {
+            return "MASTERCARD";
+        } else if (numeroTarjeta.startsWith("34") || numeroTarjeta.startsWith("37")) {
+            return "AMEX";
+        }
+        return null;
     }
 
-    private String obtenerSwiftBanco(String numeroTarjeta) {
-        // Lógica para obtener SWIFT según BIN
-        return "BANKSWIFT"; // Ejemplo simplificado
+    private String obtenerSwiftBanco(String marca) {
+        // Lógica simplificada para obtener el SWIFT del banco según la marca
+        switch (marca) {
+            case "VISA":
+                return "BQTOECEC";
+            case "MASTERCARD":
+                return "PICHECEC";
+            case "AMEX":
+                return "GUAYECEC";
+            default:
+                return null;
+        }
     }
 } 

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
@@ -27,4 +28,7 @@ public class ValidacionMarcaRequestDTO {
     @NotBlank(message = "La fecha de caducidad es requerida")
     @Pattern(regexp = "^(0[1-9]|1[0-2])/([0-9]{2})$", message = "La fecha de caducidad debe tener el formato MM/YY")
     private String fechaCaducidad;
+
+    private BigDecimal monto;
+    private String codigoUnico;
 } 

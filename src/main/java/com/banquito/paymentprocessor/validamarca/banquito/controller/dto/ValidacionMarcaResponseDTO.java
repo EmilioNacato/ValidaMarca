@@ -10,7 +10,10 @@ import lombok.NoArgsConstructor;
 public class ValidacionMarcaResponseDTO {
     
     @Schema(description = "Indica si la tarjeta es válida", example = "true")
-    private Boolean tarjetaValida;
+    private boolean tarjetaValida;
+    
+    @Schema(description = "Marca de la tarjeta", example = "Visa")
+    private String marca;
     
     @Schema(description = "Código SWIFT del banco", example = "BANKEC21")
     private String swiftBanco;

@@ -1,43 +1,60 @@
 package com.banquito.paymentprocessor.validamarca.banquito.service;
 
-import org.springframework.stereotype.Service;
-
-import com.banquito.paymentprocessor.validamarca.banquito.client.MarcaClient;
-import com.banquito.paymentprocessor.validamarca.banquito.client.dto.MarcaRequest;
-import com.banquito.paymentprocessor.validamarca.banquito.client.dto.MarcaResponse;
-import com.banquito.paymentprocessor.validamarca.banquito.exception.ValidacionMarcaException;
 import com.banquito.paymentprocessor.validamarca.banquito.controller.dto.ValidacionMarcaRequestDTO;
 import com.banquito.paymentprocessor.validamarca.banquito.controller.dto.ValidacionMarcaResponseDTO;
-
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
 public class ValidacionMarcaService {
 
-    private final MarcaClient marcaClient;
-
-    public ValidacionMarcaService(MarcaClient marcaClient) {
-        this.marcaClient = marcaClient;
+    public ValidacionMarcaResponseDTO validarMarca(ValidacionMarcaRequestDTO request) {
+        ValidacionMarcaResponseDTO response = new ValidacionMarcaResponseDTO();
+        
+        try {
+            String marca = identificarMarca(request.getNumeroTarjeta());
+            
+            if (marca != null) {
+                response.setTarjetaValida(true);
+                response.setMarca(marca);
+                response.setSwiftBanco(obtenerSwiftBanco(marca));
+                response.setMensaje("Tarjeta válida");
+            } else {
+                response.setTarjetaValida(false);
+                response.setMensaje("Marca de tarjeta no soportada");
+            }
+            
+        } catch (Exception e) {
+            log.error("Error al validar marca: {}", e.getMessage());
+            response.setTarjetaValida(false);
+            response.setMensaje("Error en validación de marca");
+        }
+        
+        return response;
     }
 
-    public MarcaResponse validarTarjeta(String numeroTarjeta, String marca, String cvv, String fechaCaducidad) {
-        log.info("Iniciando proceso de validación con marca: {}", marca);
-        try {
-            MarcaRequest request = new MarcaRequest();
-            request.setNumeroTarjeta(numeroTarjeta);
-            request.setMarca(marca);
-            request.setCvv(cvv);
-            request.setFechaCaducidad(fechaCaducidad);
+    private String identificarMarca(String numeroTarjeta) {
+        if (numeroTarjeta.startsWith("4")) {
+            return "VISA";
+        } else if (numeroTarjeta.startsWith("5")) {
+            return "MASTERCARD";
+        } else if (numeroTarjeta.startsWith("34") || numeroTarjeta.startsWith("37")) {
+            return "AMEX";
+        }
+        return null;
+    }
 
-            MarcaResponse response = marcaClient.validarTarjeta(request);
-            log.info("Respuesta recibida del servicio de marca. Tarjeta válida: {}", response.getTarjetaValida());
-            
-            return response;
-        } catch (Exception e) {
-            log.error("Error en el proceso de validación con marca: {}", e.getMessage());
-            throw new ValidacionMarcaException("Error en el proceso de validación con marca: " + e.getMessage());
+    private String obtenerSwiftBanco(String marca) {
+        switch (marca) {
+            case "VISA":
+                return "BQTOECEC";
+            case "MASTERCARD":
+                return "PICHECEC";
+            case "AMEX":
+                return "GUAYECEC";
+            default:
+                return null;
         }
     }
 } 
